@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Stock Stalker</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<!--script src="lib/dust/dust-full-2.4.0.js"></script>
+        <script src="lib/dust/dust-helpers-1.2.0.js"></script>
+        <script src="lib/underscore-1.6.0.min.js"></script>
+		<script src="lib/jquery/jquery-2.1.1.min.js"></script>
+		<link rel="stylesheet" href="lib/jquery/css/themes/default/jquery.mobile-1.4.3.min.css"-->
+
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
+
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.css" />
+        <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+        <script src="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
+
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/dustjs-linkedin/2.4.0/dust-full.min.js"></script>
+        <script src="//cdn.jsdelivr.net/dustjs.helpers/1.2.0/dust-helpers.min.js"></script>
+
+
+		<script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.2.19.min.js"></script>
+		<script type="text/javascript" src="js/YFiDownloader.js"></script>
+		<script type="text/javascript" src="js/portfolios.js"></script>
+		<script type="text/javascript" src="js/quotemgr.js"></script>
+		<script type="text/javascript" src="build/templates/templates.js"></script>
+		<script type="text/javascript" src="js/templateWrapper.js"></script>
+		<script type="text/javascript" src="js/DustHelpers.js"></script>
+		<script type="text/javascript" src="js/import.js"></script>
+		<script type="text/javascript" src="js/app.js"></script>
+		<link rel="stylesheet" href="css/test.css">
+
+        <script>
+
+            $(document).bind('mobileinit', function() {
+                if (document.body)
+                    console.log("init: Body exists " + document.body.querySelector('[data-role="page"]'));
+                else
+                    console.log("body doesn't exist");
+
+                $.extend($.support, {
+                    cors: true
+                });
+                $.extend($.mobile, {
+                    allowCrossDomainPages: true, // To ensure remote fecthing of jQM styled pages
+                    pushStateEnabled: false, // Must be disabled to fetch remote pages and still get the Back button working
+                    touchOverflowEnabled: false, // Better scrolling in iOS 5
+                    loadingMessage: false,
+                    pageLoadErrorMessage: "Page load error",
+                    loadMsgDelay: 2000
+                });
+            });
+            $(document).bind('ready', function() {
+                Stock.App.init();
+            });
+        </script>
+        <script src="lib/jquery/jquery.mobile-1.4.3.min.js"></script>
+		<script>
+			
+			
+			$(document).ready(function() {
+                //$("[data-role=panel]").panel().enhanceWithin();
+				// for panel $( "#Dashboard" ).trigger( "updatelayout" );
+			});
+		</script>
+    </head>
+    <body>
+        <div data-role="page" id="Dashboard" data-temp="1">
+        </div>
+
+    </body>
+</html>

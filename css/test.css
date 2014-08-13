@@ -1,0 +1,78 @@
+body * {
+  font-family: Helvetica, 'Nokia Sans', Arial, Sans-serif;
+}
+.positive {
+  color: #008000;
+}
+.negative {
+  color: #f00;
+}
+#Dashboard .ui-content {
+  padding: 0 0 30px 0;
+}
+#Dashboard .headlines .ui-listview {
+  margin: 0px;
+}
+table th {
+  text-align: center;
+  padding: 3px;
+}
+table td .ui-btn {
+  margin: 0;
+}
+table td:not(.symbol) {
+  text-align: right;
+}
+table td {
+  overflow: hidden;
+}
+table.full-width {
+  width: 100%;
+}
+table.draw-border {
+  border-spacing: 0px;
+}
+table.draw-border td {
+  padding: 10px 5px;
+  border-bottom: 1px solid #ddd;
+}
+.ui-page-header-fixed {
+  padding-top: 45px !important;
+}
+.nav-panel .ui-btn-icon-right:after {
+  display: none;
+}
+.nav-panel.authed .login {
+  display: none;
+}
+.nav-panel:not(.authed) .logout {
+  display: none;
+}
+#Login {
+  max-width: 260px;
+}
+[data-role="popup"] .container {
+  text-align: center;
+  padding: 10px 20px;
+}
+.fixed-column-container {
+  display: block;
+  overflow-x: hidden;
+  margin-left: 8em;
+  overflow-y: visible;
+}
+.fixed-column-container table td:not(.headcol) {
+  padding: 10px 5px;
+  min-width: 5em;
+}
+.fixed-column-container table td:not(.symbol) {
+  text-align: right;
+}
+.fixed-column-container table .headcol {
+  position: absolute;
+  width: 8em;
+  left: 0;
+  top: auto;
+  overflow: hidden;
+  white-space: nowrap;
+}
