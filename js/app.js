@@ -500,7 +500,7 @@
 
 	function render() {
 		var page = document.querySelector(".ui-page-active");
-		switch(page.dataset.url) {
+		switch(page ? page.dataset.url : location.hash) {
 			case "Dashboard":
 				renderDashboard();
 				break;

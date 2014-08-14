@@ -25,11 +25,15 @@ table td:not(.symbol) {
 }
 table td {
   overflow: hidden;
+  min-width: 50px;
+  white-space: nowrap;
 }
-table td.label {
+table td.label,
+table td.left {
   text-align: left;
 }
-table td.value {
+table td.value,
+table td.right {
   text-align: right;
 }
 table.full-width {
@@ -54,12 +58,21 @@ table.draw-border td {
 .nav-panel:not(.authed) .logout {
   display: none;
 }
+.headlines .ui-listview {
+  margin: 1em -1em;
+}
 #Login {
   max-width: 260px;
 }
 [data-role="popup"] .container {
   text-align: center;
   padding: 10px 20px;
+}
+.scroll-container {
+  display: block;
+  overflow-x: hidden;
+  overflow-y: visible;
+  margin: 0 -1em;
 }
 .fixed-column-container {
   display: block;
@@ -70,6 +83,9 @@ table.draw-border td {
 .fixed-column-container table td:not(.headcol) {
   padding: 10px 5px;
   min-width: 5em;
+}
+.fixed-column-container table td {
+  text-align: left;
 }
 .fixed-column-container table td:not(.symbol) {
   text-align: right;
