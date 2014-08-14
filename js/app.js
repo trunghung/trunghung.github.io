@@ -255,6 +255,7 @@
 					break;
 				case "viewStock":
 					if (renderViewStock(info.el.dataset.symbol, info.el.dataset.lot)) {
+						Stock.QuoteManager.downloadSingleQuote(info.el.dataset.symbol);
 						$.mobile.navigate("#ViewStock");
 					}
 					break;

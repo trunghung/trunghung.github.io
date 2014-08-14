@@ -26,6 +26,12 @@ table td:not(.symbol) {
 table td {
   overflow: hidden;
 }
+table td.label {
+  text-align: left;
+}
+table td.value {
+  text-align: right;
+}
 table.full-width {
   width: 100%;
 }

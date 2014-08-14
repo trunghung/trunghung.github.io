@@ -18,6 +18,7 @@
 		ready: isQuotesReady,
 		lastFullDownload: function () { return _lastFullFetch; },
 		update: refreshQuotes,
+	    downloadSingleQuote: downloadSingleQuote,
 		
 		getInfo: getInfo,
 		getEarnings: getEarnings,
@@ -75,6 +76,13 @@
 		}
 		updatingQuote = false;
 	};
+	function downloadSingleQuote(symbol) {
+		Stock.Downloader.downloadSingleQuote(symbol, function(quote) {
+			if (quote) {
+				parseResults([quote]);
+			}
+		});
+	}
 	function downloadQuotes () {
 		var info = Stock.Portfolios.getStocksList();
 		
