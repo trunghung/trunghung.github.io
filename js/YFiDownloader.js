@@ -23,11 +23,12 @@
 		}
 		return ret;
 	}
-	function convertToDom(response) {
+	function convertToDom(html) {
 		var el = null;
-		if (response && response.query && response.query.results && response.query.results.result) {
+		if (html) {
 			el = document.createElement("DIV");
-			el.innerHTML = response.query.results.result.replace(/[\n]/g, "").replace(/<img/g,"<img2");	// neuter all the image tags
+			// neuter all the image and script tags
+			el.innerHTML = html;
 		}
 		return el;
 	}
@@ -296,6 +297,16 @@
 	}
 	
 	function requestFile(url, callbackFn) {
+		Parse.Cloud.run('getPage', { url: url }, {
+			success: function(data) {
+				callbackFn.success(data);
+			},
+			error: function(error) {
+				callbackFn.error();
+			}
+		});
+	}
+	function requestFileXHR(url, callbackFn) {
 		var xmlhttp=new XMLHttpRequest();
 		xmlhttp.onreadystatechange=function() {
 			if (xmlhttp.readyState==4) {
@@ -309,7 +320,7 @@
 		xmlhttp.send();
 	}
 	function downloadDetailedQuotes(tickers) {
-		var query, url; 
+		var url;
 		if (tickers && tickers.options.length > 0 || tickers.stocks.length > 0) {
 			url = window.location.host + window.location.pathname;
 			if (url.lastIndexOf("localhost") != -1 || url.lastIndexOf("127.0.0.1") != -1) {
@@ -317,13 +328,11 @@
 			}
 			//query = ['use "http://', url, 'yql_page_fetch.xml" as MyTable; select * from MyTable where url="http://finance.yahoo.com/quotes/',
 			//		tickers.stocks.join(','), ",", tickers.options.join(","), '/view/dv" and  xpath="//div[@id=\'yfi-main\']"'].join('');
-			query = ['select * from htmlstring where url="http://finance.yahoo.com/quotes/',
-						tickers.stocks.join(','), ",", tickers.options.join(","), '/view/dv" and  xpath="//div[@id=\'yfi-main\']"'].join('');
-			console.log("Downloading detailed quotes.\nQuery: " + query);
-			url = "http://query.yahooapis.com/v1/public/yql?q=" + encodeURIComponent(query)  + "&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&rand=" + (new Date()).getTime();
+			url = ["http://finance.yahoo.com/quotes/", tickers.stocks.join(','), ",", tickers.options.join(","), "/view/dv"].join('');
+			console.log("Downloading detailed quotes.\nQuery: " + url);
 			requestFile(url, {
 				success: function(response) {
-					var quotes = parseDetailedView(JSON.parse(response));
+					var quotes = parseDetailedView(response);
 					onQuotesDownloadedCB && onQuotesDownloadedCB(quotes);
 				}
 			});
@@ -339,18 +348,11 @@
 			}
 			/*query = ['use "http://', url, 'yql_page_fetch.xml" as MyTable; select * from MyTable where url="http://finance.yahoo.com/quotes/',
 					tickers.stocks.join(','), ",", tickers.options.join(","), '/view/e" and  xpath="//div[@id=\'yfi-main\']"'].join('');*/
-			query = ['select * from htmlstring where url="http://finance.yahoo.com/quotes/',
-				tickers.stocks.join(','), ",", tickers.options.join(","), '/view/e" and  xpath="//div[@id=\'yfi-main\']"'].join('');
-
-			/*
-			 *query = ['use "http://', url, 'yql_page_fetch.xml" as MyTable; select * from MyTable where url="http://finance.yahoo.com/quotes/',         
-					tickers.stocks.join(','), ",", tickers.options.join(","), '/view/e" and xpath="//div[@id=\'sortableTable0\']"'].join('');
-					*/
-			console.log("Downloading RT quotes.\nQuery: " + query);
-			url = "http://query.yahooapis.com/v1/public/yql?q=" + encodeURIComponent(query) + "&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&rand=" + (new Date()).getTime();
+			url = ["http://finance.yahoo.com/quotes/", tickers.stocks.join(','), ",", tickers.options.join(","), "/view/e"].join('');
+			console.log("Downloading RT quotes.\nQuery: " + url);
 			requestFile(url, {
 				success: function(response) {
-					var quotes = parseRTView(JSON.parse(response));
+					var quotes = parseRTView(response);
 					onQuotesDownloadedCB && onQuotesDownloadedCB(quotes);
 				}
 			});
@@ -365,12 +367,10 @@
 		}
 		//query = ['use "http://', url, 'yql_page_fetch.xml" as MyTable; select * from MyTable where url="http://finance.yahoo.com/q?s=',
 		//			ticker, '" and  xpath="//div[@id=\'yfi_investing_content\']"'].join('');
-		query = ['select * from htmlstring where url="http://finance.yahoo.com/q?s=',
-					ticker, '" and  xpath="//div[@id=\'yfi_investing_content\']"'].join('');
-		url = "http://query.yahooapis.com/v1/public/yql?q=" + encodeURIComponent(query) + "&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&rand=" + (new Date()).getTime();
+		url = "http://finance.yahoo.com/q?s=" + ticker + "&rand=" + (new Date()).getTime();
 		requestFile(url, {
 				success: function(response) {
-					var quote = parseSingleQuoteView(ticker, JSON.parse(response));
+					var quote = parseSingleQuoteView(ticker, response);
 					//onQuotesDownloadedCB && onQuotesDownloadedCB([quote]);
 					cb && cb(quote );
 				}
@@ -380,7 +380,7 @@
 	function getTopNews(callback) {
 		var query = 'select * from rss where url="http://hosted.ap.org/lineups/BUSINESSHEADS-rss_2.0.xml?SITE=NHPOR&SECTION=HOME"';
 		var url = "http://query.yahooapis.com/v1/public/yql?q=" + encodeURIComponent(query) + "&format=json&rand=" + (new Date()).getTime();
-		requestFile(url, {
+		requestFileXHR(url, {
 				success: function(response) {
 					try {
 						var news = JSON.parse(response);
@@ -396,7 +396,7 @@
 		if (stocks) {
 			query = ['select * from rss where url="http://finance.yahoo.com/rss/headline?s=', stocks.replace(/\^/gi, "%5E"),'"'].join('');
 			var url = "http://query.yahooapis.com/v1/public/yql?q=" + encodeURIComponent(query) + "&format=json&rand=" + (new Date()).getTime();
-			requestFile(url, {
+			requestFileXHR(url, {
 					success: function(response) {
 						try {
 							var news = JSON.parse(response);
