@@ -98,3 +98,13 @@ table.draw-border td {
   overflow: hidden;
   white-space: nowrap;
 }
+#footer {
+  white-space: nowrap;
+}
+#footer .ui-btn {
+  width: 20%;
+  background-color: transparent;
+  padding-left: 0;
+  padding-right: 0;
+  margin: 0;
+}
