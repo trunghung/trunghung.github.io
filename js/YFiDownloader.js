@@ -242,7 +242,7 @@
 	// sample
 	// ETF: IVV, OPTIONS: yhoo150117c00025000, MF: fcntx
 	function parseSingleQuoteView(ticker, response) {
-		var quotes = [], range, change, info, quote = { symbol: ticker.toUpperCase()}, elInfo,
+		var isUp = false, quotes = [], range, change, info, quote = { symbol: ticker.toUpperCase()}, elInfo,
 		elRoot = convertToDom(response), el;
 		if (!elRoot) return null;
 		el = elRoot.querySelector("#yfi_investing_content .yfi_rt_quote_summary");
@@ -252,17 +252,21 @@
 		elInfo = el.querySelector(".time_rtq_content");
 		if (elInfo) {
 			change = parseChange(elInfo.innerText.replace(/,/g, ""));
-			var positive = !!elInfo.querySelector(".yfi-price-change-green");
-			quote.change = change.change * (positive ? 1 : -1);
+			var isUp = !!elInfo.querySelector(".pos_arrow");
+			quote.change = change.change * (isUp ? 1 : -1);
 			quote["percent-change"] = change.percent;
 		}
 		
 		// extract AH prices
-		elInfo = el.querySelector("#yfs_l86_" + ticker);
+		var lcTicker = ticker.toLowerCase();
+		elInfo = el.querySelector("#yfs_l86_" + lcTicker);
 		if (elInfo) quote.priceAH = parseFloat(elInfo.innerText.replace(/,/g, ""));
-		elInfo = el.querySelector("#yfs_c85_" + ticker);
+		elInfo = el.querySelector("#yfs_c85_" + lcTicker);
 		if (elInfo) quote.changeAH = parseFloat(elInfo.innerText.replace(/[ ,\,]/g, ""));
-		elInfo = el.querySelector("#yfs_c86_" + ticker);
+		var isUp = !!elInfo.querySelector(".pos_arrow");
+		if (!isUp) quote.changeAH *= -1;
+
+		elInfo = el.querySelector("#yfs_c86_" + lcTicker);
 		if (elInfo) quote.percent_changeAH = parseFloat(elInfo.innerText.replace(/[(,),\,%]/g, ""));
 		
 		el = elRoot.querySelectorAll("#yfi_investing_content .yfi_quote_summary tr");
