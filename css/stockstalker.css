@@ -7,7 +7,7 @@ body * {
 .negative {
   color: #f00;
 }
-#Dashboard .ui-content {
+.stock-stalker .ui-content {
   padding: 0 0 30px 0;
 }
 #Dashboard .headlines .ui-listview {
