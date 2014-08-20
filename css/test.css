@@ -115,3 +115,9 @@ table.draw-border td {
 #footer .ui-btn.ui-btn-icon-top:after {
   top: 0.2em;
 }
+.my_portfolios {
+  padding: 5px;
+}
+.my_portfolios .heading {
+  font-size: x-large;
+}

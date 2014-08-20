@@ -472,7 +472,7 @@
 
 	function renderDashboard() {
 		var context = { };
-		context.myStocks = Stock.Portfolios.getCombinedLots({ ignoreOptions: false });
+		context.myStocks = Stock.Portfolios.getCombinedLots({ ignoreOptions: true });
 		context.earnings = Stock.QuoteManager.getEarnings();
 		var news = Stock.QuoteManager.getTopNews();
 		if (news.length > 0)

@@ -3,7 +3,7 @@
 		var field = context.get(params.field),
 			format = params.format ? params.format : params.field;
 		if (field) {
-			chunk.write(formatTagValue(field, format));
+			chunk.write(formatTagValue(field, format, undefined, 0, params.longVal));
 		}
 		
 		return chunk.write("");
@@ -187,16 +187,21 @@ var TAG_FORMATTER = {
 	"pf-percent":           { decimal: 0.2, dollarSign: false, percentSign: true, label: "Position" },
 	"shares":               { decimal: 0, dollarSign: false, percentSign: false, label: "Shares" }
 };
-function formatTagValue(tagValue, tag, noDollarSign, maxLength) {
+function formatTagValue(tagValue, tag, noDollarSign, maxLength, addComma) {
 	if (!tagValue)
 		tagValue = "";
 	else {
-		// Normalize large values
-		if (tagValue > 999999999) {
-			tagValue = (tagValue / 1000000000).toFixed(1) + "B";
+		if (addComma) {
+			tagValue = addCommas(tagValue);
 		}
-		else if (tagValue > 999999) {
-			tagValue = (tagValue / 1000000).toFixed(1) + "M";
+		else {
+			// Normalize large values
+			if (tagValue > 999999999) {
+				tagValue = (tagValue / 1000000000).toFixed(1) + "B";
+			}
+			else if (tagValue > 999999) {
+				tagValue = (tagValue / 1000000).toFixed(1) + "M";
+			}
 		}
 		if (TAG_FORMATTER[tag]) {
 			if(tagValue.toFixed) {
