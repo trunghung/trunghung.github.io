@@ -107,4 +107,11 @@ table.draw-border td {
   padding-left: 0;
   padding-right: 0;
   margin: 0;
+  padding-bottom: 2px;
+  padding-top: 2em;
+  font-weight: normal;
+  font-size: 10px;
+}
+#footer .ui-btn.ui-btn-icon-top:after {
+  top: 0.1em;
 }
