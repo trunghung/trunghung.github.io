@@ -1,0 +1,176 @@
+body * {
+  font-family: Helvetica, 'Nokia Sans', Arial, Sans-serif;
+}
+.positive {
+  color: #008000;
+}
+.negative {
+  color: #f00;
+}
+#Dashboard .ui-content {
+  padding: 0 0 30px 0;
+}
+#Dashboard .headlines .ui-listview {
+  margin: 0px;
+}
+table th {
+  text-align: center;
+  padding: 3px;
+}
+table td .ui-btn {
+  margin: 0;
+}
+table td:not(.symbol) {
+  text-align: right;
+}
+table td {
+  overflow: hidden;
+  min-width: 50px;
+  white-space: nowrap;
+}
+table td.label,
+table td.left {
+  text-align: left;
+}
+table td.value,
+table td.right {
+  text-align: right;
+}
+table.full-width {
+  width: 100%;
+}
+table.draw-border {
+  border-spacing: 0px;
+}
+table.draw-border td {
+  padding: 10px 5px;
+  border-bottom: 1px solid #ddd;
+}
+.ui-page-header-fixed {
+  padding-top: 45px !important;
+}
+.nav-panel .ui-btn-icon-right:after {
+  display: none;
+}
+.nav-panel.authed .login {
+  display: none;
+}
+.nav-panel:not(.authed) .logout {
+  display: none;
+}
+.headlines .ui-listview {
+  margin: 1em -1em;
+}
+#Login {
+  max-width: 260px;
+}
+[data-role="popup"] .container {
+  text-align: center;
+  padding: 10px 20px;
+}
+.scroll-container {
+  display: block;
+  overflow-x: hidden;
+  overflow-y: visible;
+  margin: 0 -1em;
+}
+.fixed-column-container {
+  display: block;
+  overflow-x: hidden;
+  margin-left: 5em;
+  overflow-y: visible;
+}
+.fixed-column-container table td:not(.headcol) {
+  padding: 10px 5px;
+  min-width: 5em;
+}
+.fixed-column-container table td {
+  text-align: left;
+}
+.fixed-column-container table td:not(.symbol) {
+  text-align: right;
+}
+.fixed-column-container table .headcol {
+  position: absolute;
+  width: 5em;
+  left: 0;
+  top: auto;
+  overflow: hidden;
+  white-space: nowrap;
+}
+#footer {
+  white-space: nowrap;
+}
+#footer .ui-btn {
+  width: 20%;
+  background-color: transparent;
+  padding-left: 0;
+  padding-right: 0;
+  margin: 0;
+  padding-bottom: 5px;
+  padding-top: 2.5em;
+  font-weight: normal;
+  font-size: 10px;
+}
+#footer .ui-btn.ui-btn-icon-top:after {
+  top: 0.2em;
+}
+.my_portfolios {
+  padding: 5px;
+}
+.my_portfolios .heading {
+  font-size: x-large;
+  padding: 0 0 15px 0;
+}
+.summary-list-container .summary-list-layout {
+  position: relative;
+  border-top: 1px solid #ddd;
+  padding: 0 0 10px 0;
+}
+.summary-list-container .summary-list-layout .row {
+  text-align: right;
+}
+.summary-list-container .summary-list-layout .row:first-child > span {
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+.summary-list-container .summary-list-layout .name {
+  position: absolute;
+  left: 0;
+}
+.summary-list-container .summary-list-layout .change-box {
+  background-color: #008000;
+  color: #fff;
+}
+.summary-list-container .summary-list-layout .change-box.negative {
+  background-color: #f00;
+}
+.summary-list-container .summary-list-layout .small {
+  font-size: x-small;
+}
+.summary-list-container .summary-list-layout .right-col {
+  min-width: 85px;
+  display: inline-block;
+  padding-right: 10px;
+}
+.summary-list-container .summary-list-layout .mid-col,
+.summary-list-container .summary-list-layout .right-col {
+  text-align: right;
+}
+.summary-list-container .summary-list-layout .mid-col {
+  min-width: 100px;
+  padding-right: 20px;
+  display: inline-block;
+}
+.summary-list-container .summary-list-layout .col-name {
+  position: absolute;
+  right: 15px;
+  top: -16px;
+  font-size: x-small;
+}
+.summary-list-container:not(.show-alt) .alt2 {
+  display: none;
+}
+.summary-list-container.show-alt .alt1 {
+  display: none;
+}
