@@ -2,7 +2,7 @@
 	dust.helpers.formatField = function(chunk, context, bodies, params) {
 		var field = context.get(params.field),
 			format = params.format ? params.format : params.field;
-		if (field) {
+		if (field != undefined) {
 			chunk.write(formatTagValue(field, format, undefined, 0, params.longVal));
 		}
 		
@@ -21,7 +21,10 @@
 			return chunk.write(symbol);
 		}
 		return chunk.write("");
-     };
+    };
+	dust.helpers.positive = function (chunk, context, bodies, params) {
+		return chunk.write(params.val >= 0 ? "positive" : "negative");
+	};
 	dust.helpers.changeClass = function(chunk, context, bodies, params) {
 		if (params.type == "quote") {
 			var symbol = context.get("symbol"),
@@ -188,7 +191,7 @@ var TAG_FORMATTER = {
 	"shares":               { decimal: 0, dollarSign: false, percentSign: false, label: "Shares" }
 };
 function formatTagValue(tagValue, tag, noDollarSign, maxLength, addComma) {
-	if (!tagValue)
+	if (tagValue == undefined)
 		tagValue = "";
 	else {
 		if (addComma) {
