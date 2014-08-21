@@ -44,7 +44,7 @@ table.draw-border {
 }
 table.draw-border td {
   padding: 10px 5px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px dashed #ddd;
 }
 .ui-page-header-fixed {
   padding-top: 45px !important;
@@ -124,11 +124,13 @@ table.draw-border td {
 }
 .summary-list-container .summary-list-layout {
   position: relative;
-  border-top: 1px solid #ddd;
+  border-top: 1px dashed #ddd;
   padding: 0 0 10px 0;
 }
 .summary-list-container .summary-list-layout .row {
   text-align: right;
+  text-shadow: none;
+  font-size: 14px;
 }
 .summary-list-container .summary-list-layout .row:first-child > span {
   padding-top: 3px;
@@ -146,7 +148,7 @@ table.draw-border td {
   background-color: #f00;
 }
 .summary-list-container .summary-list-layout .small {
-  font-size: smaller;
+  font-size: 12px;
 }
 .summary-list-container .summary-list-layout .right-col {
   min-width: 65px;
