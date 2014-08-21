@@ -146,10 +146,10 @@ table.draw-border td {
   background-color: #f00;
 }
 .summary-list-container .summary-list-layout .small {
-  font-size: x-small;
+  font-size: smaller;
 }
 .summary-list-container .summary-list-layout .right-col {
-  min-width: 85px;
+  min-width: 65px;
   display: inline-block;
   padding-right: 10px;
 }
@@ -159,14 +159,16 @@ table.draw-border td {
 }
 .summary-list-container .summary-list-layout .mid-col {
   min-width: 100px;
-  padding-right: 20px;
+  padding-right: 10px;
   display: inline-block;
 }
 .summary-list-container .summary-list-layout .col-name {
   position: absolute;
-  right: 15px;
+  right: 0;
   top: -16px;
   font-size: x-small;
+  min-width: 75px;
+  text-align: center;
 }
 .summary-list-container:not(.show-alt) .alt2 {
   display: none;
