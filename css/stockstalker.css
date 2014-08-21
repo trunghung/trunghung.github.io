@@ -133,8 +133,8 @@ table.draw-border td {
   font-size: 14px;
 }
 .summary-list-container .summary-list-layout .row:first-child > span {
-  padding-top: 3px;
-  padding-bottom: 3px;
+  padding-top: 1px;
+  padding-bottom: 1px;
 }
 .summary-list-container .summary-list-layout .name {
   position: absolute;
