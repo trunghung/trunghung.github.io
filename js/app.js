@@ -291,6 +291,11 @@
 						$.mobile.navigate("#ViewStock");
 					}
 					break;
+				case "viewNews":
+					if (renderViewNews()) {
+						$.mobile.navigate("#ViewNews");
+					}
+					break;
 				case "viewDashboard":
 					$.mobile.navigate("#Dashboard");
 					break;
@@ -528,6 +533,11 @@
 				return a.name > b.name ? 1 : (a.name == b.name ? 0 : -1);
 		});
 		renderPage("ViewPorts", "ViewPorts", context);
+		return true;
+	}
+	function renderViewNews() {
+		var context = { headlines: Stock.QuoteManager.getStocksNews() };
+		renderPage("News", "ViewNews", context);
 		return true;
 	}
 	function renderDashboard() {

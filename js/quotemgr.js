@@ -23,6 +23,7 @@
 		getInfo: getInfo,
 		getEarnings: getEarnings,
 		getTopNews: getTopNews,
+	    getStocksNews: getStocksNews,
 		getNews: getNews
     };
 	_.extend(Stock.QuoteManager, Parse.Events);
@@ -72,7 +73,7 @@
 			console.log("QuoteMgr: Quote info downloaded");
 		}
 		else {
-			console.log("QuoteMgr: Error in query for stock quote " + quotes);
+			console.log("QuoteMgr: Error in query for stock quote ");
 		}
 		updatingQuote = false;
 	};
@@ -100,7 +101,7 @@
 				}
 			});
 			// do a full fetch once an hour
-			if (!_lastFullFetch || (new Date()).getTime() - _lastFullFetch.getTime() > 3600000) {
+			if (Stock.Utils.timeMoreThan(_lastFullFetch, 60)) {
 				_lastFullFetch = new Date();
 				downloaded = 0;
 				Stock.Downloader.downloadDetailedQuotes(info);
@@ -117,12 +118,10 @@
 		}
 	}
 	function refreshQuotes() {
-		// Make sure we are not already updating
 		if (updatingQuote !== true) {
 			downloadQuotes();
-			//getYqlQuery();
 			updatingQuote = true;
-			// Reset the flag after x seconds
+			// Reset the flag after 10 seconds
 			setTimeout(function() {
 				updatingQuote = false;
 			}, 10000);
@@ -143,7 +142,6 @@
 		});
 		Stock.Portfolios.on("portsReady", function(obj, collection, index) {
 			console.log("QuoteMgr: portsReady: received");
-			//refreshQuotes();
 		});
 		Stock.Portfolios.on("lotsReady", function(obj, collection, index) {
 			console.log("QuoteMgr: lotsReady: received. Downloading quotes");
@@ -161,7 +159,6 @@
 				var timeToUpdate = timeToUpdateEarnings(quote, earning.lastUpdated);
 				if (timeToUpdate > 0) {
 					quotes.push(quote);
-					//console.log("Earnings: Time to update: " + sym + " : " + Math.round(timeToUpdate/(24*60*60*1000)) + "days");
 				}
 				else {
 					delete _earnings[sym];	 // clear it from cache
@@ -261,14 +258,7 @@
 		}
 		return _topNews;
 	}
-	
-	function onNewsQueryResult(results) {
-		quoteMgr.trigger('newsDownloaded', results);
-	};
-	function queryForNews(stocks, callback) {
-		
-	};
-	
+
 	function getNews(stock, callback) {
 		if (stock && !_stockNews[stock]) {
 			Stock.Downloader.getNews(stock, function (news) {
@@ -283,6 +273,77 @@
 		}
 		return _stockNews[stock];
 	}
+	var _newsEventPending = false;
+	var _newsLastFetched = [];
+	var _combinedNews = [];
+	function onNewsDownloaded(newsItem, symbol) {
+		var curItem, existing;
+		// Merge news
+		for (var i in newsItem) {
+			curItem = newsItem[i];
+			curItem.date = new Date(curItem.pubDate);
+			// Drop news items older than 8 weeks and video and paid news link
+			if (Stock.Utils.timeMoreThan(curItem.date, 80640)) {
+				console.log("News: Old new items. Date: " + curItem.pubDate);
+				continue;
+			}
+			if (curItem.title.indexOf("[$$]") == -1 && curItem.title.indexOf("[video]") == -1) {
+				existing = _combinedNews.filter(function (msg) {
+					return msg.guid == curItem.guid;
+				});
+				if (existing.length == 0) {
+					_combinedNews.push(curItem);
+					console.log("News: Adding new news item");
+				}
+				else {
+					curItem = existing;
+					console.log("News: Matching item found. GUID: " + curItem.guid);
+				}
+				if (!curItem.symbol) {
+					curItem.symbol = symbol;
+					curItem.symbols = [symbol];
+				}
+				else if (curItem.symbol != symbol) {
+					// is the symbol already saved in the list
+					if (curItem.symbols.filter(function (item) {
+						return item == symbol;
+					}).length == 0) {
+						curItem.symbols.push(symbol);
+					}
+				}
+			}
+			else {
+				console.log("News: Skipping video and paid news item");
+			}
+		}
+
+		// Wait 0.5 second for all the news to arrive together
+		if (!_newsEventPending) {
+			_newsEventPending = true;
+			setTimeout(function () {
+				_combinedNews.sort(function(a, b) { return b.date.getTime() - a.date.getTime(); })
+				_newsEventPending = false;
+				quoteMgr.trigger('news', _combinedNews);
+				console.log(_combinedNews);
+			}, 500);
+		}
+
+	}
+	function getStocksNews(force) {
+		var i, info = Stock.Portfolios.getStocksList();
+		for (i=0; i < info.stocks.length; i++) {
+			var symbol = info.stocks[i];
+			if (force || Stock.Utils.timeMoreThan(_newsLastFetched[symbol], 10)) {
+				_newsLastFetched[symbol] = new Date();
+				Stock.Downloader.getNews(symbol, onNewsDownloaded);
+			}
+			else {
+				console.log("News: last fetch still good. skipping. Symbol: " + symbol)
+			}
+		}
+		return _combinedNews;
+	}
+
 	init();
 	_.extend(Stock.QuoteManager, Parse.Events);
 })();

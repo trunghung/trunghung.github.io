@@ -7,9 +7,6 @@ body * {
 .negative {
   color: #f00;
 }
-.stock-stalker .ui-content {
-  padding: 0 0 30px 0;
-}
 #Dashboard .headlines .ui-listview {
   margin: 0px;
 }
@@ -72,7 +69,7 @@ table.draw-border td {
   display: block;
   overflow-x: hidden;
   overflow-y: visible;
-  margin: 0 -1em;
+  margin: 1em 0;
 }
 .fixed-column-container {
   display: block;
@@ -125,7 +122,7 @@ table.draw-border td {
 .summary-list-container .summary-list-layout {
   position: relative;
   border-top: 1px dashed #ddd;
-  padding: 0 0 10px 0;
+  padding: 0 0 5px 0;
 }
 .summary-list-container .summary-list-layout .row {
   text-align: right;

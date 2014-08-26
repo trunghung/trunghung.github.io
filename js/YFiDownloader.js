@@ -263,7 +263,7 @@
 		if (elInfo) quote.priceAH = parseFloat(elInfo.innerText.replace(/,/g, ""));
 		elInfo = el.querySelector("#yfs_c85_" + lcTicker);
 		if (elInfo) quote.changeAH = parseFloat(elInfo.innerText.replace(/[ ,\,]/g, ""));
-		var isUp = !!elInfo.querySelector(".pos_arrow");
+		var isUp = elInfo && !!elInfo.querySelector(".pos_arrow");
 		if (!isUp) quote.changeAH *= -1;
 
 		elInfo = el.querySelector("#yfs_c86_" + lcTicker);
@@ -404,7 +404,7 @@
 					success: function(response) {
 						try {
 							var news = JSON.parse(response);
-							callback && callback(news.query.results.item);
+							callback && callback(news.query.results.item, stocks);
 						}
 						catch(e) {
 							
