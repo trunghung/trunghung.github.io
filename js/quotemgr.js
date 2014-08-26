@@ -259,19 +259,23 @@
 		return _topNews;
 	}
 
-	function getNews(stock, callback) {
-		if (stock && !_stockNews[stock]) {
-			Stock.Downloader.getNews(stock, function (news) {
-				_stockNews[stock] = news;
-				// clear the news after 5 min
-				setTimeout(function() {
-					delete _stockNews[stock];
-				}, 300000);
-				callback && callback(news);
-				quoteMgr.trigger('news', news);
-			});
+	function getNews(symbol) {
+		if (Stock.Utils.timeMoreThan(_newsLastFetched[symbol], 10)) {
+			_newsLastFetched[symbol] = new Date();
+			Stock.Downloader.getNews(symbol, onNewsDownloaded);
 		}
-		return _stockNews[stock];
+		else {
+			console.log("News: last fetch still good. skipping. Symbol: " + symbol)
+		}
+		function filter(item) {
+			return item.symbol == symbol ||
+				(curItem.symbols && curItem.symbols.filter(
+					function (item) {
+						return item == symbol;
+					}
+				).length == 0);
+		}
+		return _combinedNews.filter(filter);
 	}
 	var _newsEventPending = false;
 	var _newsLastFetched = [];
@@ -292,6 +296,8 @@
 					return msg.guid == curItem.guid;
 				});
 				if (existing.length == 0) {
+					// Remove the tracking image
+					curItem.description = curItem.description.replace(/<img.*>/, "");
 					_combinedNews.push(curItem);
 					console.log("News: Adding new news item");
 				}
@@ -301,13 +307,13 @@
 				}
 				if (!curItem.symbol) {
 					curItem.symbol = symbol;
-					curItem.symbols = [symbol];
 				}
 				else if (curItem.symbol != symbol) {
 					// is the symbol already saved in the list
 					if (curItem.symbols.filter(function (item) {
 						return item == symbol;
 					}).length == 0) {
+						curItem.symbols = curItem.symbols || [];
 						curItem.symbols.push(symbol);
 					}
 				}

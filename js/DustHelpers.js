@@ -1,4 +1,6 @@
 (function(){
+	var dayOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+		month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
 	dust.helpers.formatField = function(chunk, context, bodies, params) {
 		var field = context.get(params.field),
 			format = params.format ? params.format : params.field;
@@ -133,12 +135,27 @@
 			if (params.formInput) {
 				str = date.toISOString().slice(0,10);
 			}
+			else if (params.monDD) {
+				str = month[date.getMonth()] + " " + date.getDate();
+			}
 			else if (params.shortDate) {
 				str = [date.getMonth()+1, date.getDate(), date.getFullYear()%1000].join("/");
 			}
+			else if (params.timeElapsed) {
+				var min = ((new Date()).getTime() - date.getTime())/60000, // in minutes
+					hours = min / 60,
+					days = hours / 24;
+
+				if (days > 0) {
+					str = [dayOfWeek[date.getDay()], date.getMonth() + "/" + date.getDate(), date.toLocaleTimeString()].join(" ");
+				}
+				else if (hours > 0) {
+					str = hours > 1 ? hours + " hours ago" : "1 hour ago";
+				}
+				else
+					str = min + " minutes ago";
+			}
 			else {
-				var dayOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-					month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
 				str = [dayOfWeek[date.getDay()], month[date.getMonth()], date.getDate()].join(" ");
 			}
 		}

@@ -398,7 +398,7 @@
 	}
 	function getNews(stocks, callback) {
 		if (stocks) {
-			query = ['select * from rss where url="http://finance.yahoo.com/rss/headline?s=', stocks.replace(/\^/gi, "%5E"),'"'].join('');
+			query = ['select * from rss where url="http://articlefeeds.nasdaq.com/nasdaq/symbols?symbol=', stocks.replace(/\^/gi, "%5E"),'"'].join('');
 			var url = "http://query.yahooapis.com/v1/public/yql?q=" + encodeURIComponent(query) + "&format=json&rand=" + (new Date()).getTime();
 			requestFileXHR(url, {
 					success: function(response) {

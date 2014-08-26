@@ -41,7 +41,7 @@ table.draw-border {
 }
 table.draw-border td {
   padding: 10px 5px;
-  border-bottom: 1px dashed #ddd;
+  border-bottom: 1px solid rgba(0,0,0,0.2);
 }
 .ui-page-header-fixed {
   padding-top: 45px !important;
@@ -58,33 +58,34 @@ table.draw-border td {
 .headlines .ui-listview {
   margin: 1em -1em;
 }
-#ViewNews .ui-content {
+#ViewNews .ui-content,
+#ViewStock .ui-content {
   padding: 0;
 }
-#ViewNews .headlines ul {
+.headlines ul {
   padding: 0;
   margin: 0;
 }
-#ViewNews .headlines ul li {
+.headlines ul li {
   display: block;
   padding: 10px;
   border-bottom: 1px solid rgba(0,0,0,0.2);
 }
-#ViewNews .headlines ul li a {
+.headlines ul li a {
   color: #000 !important;
   font-style: normal;
   font-weight: normal;
   text-decoration: initial;
   font-size: 12px;
 }
-#ViewNews .headlines ul li .description {
+.headlines ul li .description {
   max-height: 3.8em;
   overflow-y: hidden;
 }
-#ViewNews .headlines ul li .title {
-  font-size: 14px;
+.headlines ul li .title {
+  font-size: 15px;
 }
-#ViewNews .headlines ul li .inline-quote .change {
+.headlines ul li .inline-quote .change {
   padding: 0 5px;
 }
 #Login {
@@ -103,14 +104,15 @@ table.draw-border td {
 .fixed-column-container {
   display: block;
   overflow-x: hidden;
-  margin-left: 5em;
+  margin-left: 4em;
   overflow-y: visible;
 }
 .fixed-column-container table td:not(.headcol) {
   padding: 10px 5px;
-  min-width: 5em;
+  min-width: 4em;
 }
 .fixed-column-container table td {
+  padding: 10px 0px;
   text-align: left;
 }
 .fixed-column-container table td:not(.symbol) {
@@ -118,11 +120,17 @@ table.draw-border td {
 }
 .fixed-column-container table .headcol {
   position: absolute;
-  width: 5em;
+  width: 4em;
   left: 0;
   top: auto;
   overflow: hidden;
   white-space: nowrap;
+}
+#ViewStock .quote-summary {
+  padding: 1em 5px;
+}
+#ViewStock .quote-details {
+  font-size: 12px;
 }
 #footer {
   white-space: nowrap;
@@ -136,10 +144,13 @@ table.draw-border td {
   padding-bottom: 5px;
   padding-top: 2.5em;
   font-weight: normal;
-  font-size: 10px;
+  font-size: 12px;
 }
 #footer .ui-btn.ui-btn-icon-top:after {
   top: 0.2em;
+}
+.my_stocks {
+  position: relative;
 }
 .my_portfolios {
   padding: 5px;
@@ -150,7 +161,7 @@ table.draw-border td {
 }
 .summary-list-container .summary-list-layout {
   position: relative;
-  border-top: 1px dashed #ddd;
+  border-top: 1px solid #ddd;
   padding: 0 0 5px 0;
 }
 .summary-list-container .summary-list-layout .row {
@@ -174,7 +185,7 @@ table.draw-border td {
   background-color: #f00;
 }
 .summary-list-container .summary-list-layout .small {
-  font-size: 12px;
+  font-size: 13px;
 }
 .summary-list-container .summary-list-layout .right-col {
   min-width: 65px;
