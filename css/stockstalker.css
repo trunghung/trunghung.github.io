@@ -40,7 +40,7 @@ table.draw-border {
   border-spacing: 0px;
 }
 table.draw-border td {
-  padding: 10px 5px;
+  padding: 10px 0px;
   border-bottom: 1px solid rgba(0,0,0,0.2);
 }
 .ui-page-header-fixed {
@@ -112,7 +112,6 @@ table.draw-border td {
   min-width: 4em;
 }
 .fixed-column-container table td {
-  padding: 10px 0px;
   text-align: left;
 }
 .fixed-column-container table td:not(.symbol) {
@@ -126,11 +125,36 @@ table.draw-border td {
   overflow: hidden;
   white-space: nowrap;
 }
+.h1 {
+  font-size: xx-large;
+}
+.h2 {
+  font-size: x-large;
+}
 #ViewStock .quote-summary {
   padding: 1em 5px;
 }
+#ViewStock .quote-summary td:not(:last-child) {
+  padding-right: 10px;
+}
 #ViewStock .quote-details {
   font-size: 12px;
+}
+#ViewStock .quote .label {
+  display: block;
+}
+#ViewStock .quote .changes {
+  font-size: small;
+}
+#ViewStock .quote .changes .change {
+  display: inline-block;
+  padding-right: 10px;
+}
+#ViewStock .quote .changes .change:not(:last-child) {
+  border-right: 1px solid rgba(0,0,0,0.2);
+}
+#ViewStock .quote .changes .change:not(:first-child) {
+  padding-left: 10px;
 }
 #footer {
   white-space: nowrap;

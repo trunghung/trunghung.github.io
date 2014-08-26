@@ -269,7 +269,7 @@
 		}
 		function filter(item) {
 			return item.symbol == symbol ||
-				(curItem.symbols && curItem.symbols.filter(
+				(item.symbols && item.symbols.filter(
 					function (item) {
 						return item == symbol;
 					}
