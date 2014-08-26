@@ -7,9 +7,9 @@
 		}
 		
 		return chunk.write("");
-     };
+    };
 	dust.helpers.quoteField = function(chunk, context, bodies, params) {
-		var symbol = context.get("symbol"),
+		var symbol = params.symbol || context.get("symbol"),
 			field = params.field,
 			quote = Stock.QuoteManager.quotes[symbol],
 			format = params.format ? params.format : field;
@@ -27,7 +27,7 @@
 	};
 	dust.helpers.changeClass = function(chunk, context, bodies, params) {
 		if (params.type == "quote") {
-			var symbol = context.get("symbol"),
+			var symbol = params.symbol || context.get("symbol"),
 				quote = Stock.QuoteManager.quotes[symbol];
 			return chunk.write(quote.change >= 0 ? "positive" : "negative");
 		}

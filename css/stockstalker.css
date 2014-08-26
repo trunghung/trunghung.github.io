@@ -58,6 +58,35 @@ table.draw-border td {
 .headlines .ui-listview {
   margin: 1em -1em;
 }
+#ViewNews .ui-content {
+  padding: 0;
+}
+#ViewNews .headlines ul {
+  padding: 0;
+  margin: 0;
+}
+#ViewNews .headlines ul li {
+  display: block;
+  padding: 10px;
+  border-bottom: 1px solid rgba(0,0,0,0.2);
+}
+#ViewNews .headlines ul li a {
+  color: #000 !important;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: initial;
+  font-size: 12px;
+}
+#ViewNews .headlines ul li .description {
+  max-height: 3.8em;
+  overflow-y: hidden;
+}
+#ViewNews .headlines ul li .title {
+  font-size: 14px;
+}
+#ViewNews .headlines ul li .inline-quote .change {
+  padding: 0 5px;
+}
 #Login {
   max-width: 260px;
 }
