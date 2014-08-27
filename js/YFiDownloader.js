@@ -414,10 +414,72 @@
 		}
 		return false;
 	}
+	function getNewsContent(url, callback) {
+		var query = ['select * from htmlstring where url="' + url + '" and  xpath="//div[@id=\'wide-main-content\']"'].join('');
+		var requestUrl = "http://query.yahooapis.com/v1/public/yql?q=" + encodeURIComponent(query)  + "&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&rand=" + (new Date()).getTime();
+		requestFileXHR(requestUrl, {
+			success: function(response) {
+				var item = {
+					symbols: []
+				};
+				try {
+					var i, nodes, el, elContent, newsContent = [], html = JSON.parse(response);
+					// Neuter all the img tags and script tags
+					html = html.query.results.result.replace(/src=\"http/g,'src2="http').replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "");
+					elContent = convertToDom(html);
+
+					// Extract author and date
+					el = elContent.querySelector("h1");
+					item.title = el && el.innerText.trim();
+					el = elContent.querySelector(".dateCreated [rel=author]");
+					item.publisher = el && el.innerText.trim();
+					el = elContent.querySelector(".dateCreated [content]");
+					item.pubDate = el && el.innerText.trim();
+					item.date = new Date(item.pubDate);
+
+					// Convert all the a tag into <b> and extract referenced stocks
+					nodes = elContent.querySelectorAll("#wide-main-content p a");
+					for(i=0; i < nodes.length; i++) {
+						el = nodes[i];
+						var text = el.innerText.trim();
+						if (el.href.indexOf("http://www.nasdaq.com/symbol/") == 0) {
+							item.symbols.push(text);
+							el.remove();
+						}
+						else if (text.length = 0) {
+							el.remove();
+						}
+						else {
+							elChild = document.createElement("b");
+							elChild.innerText = text;
+							el.parentNode.replaceChild(elChild, el);
+						}
+					}
+
+					nodes = elContent.querySelectorAll("#wide-main-content > p");
+					for(i=0; i<nodes.length; i++) {
+						el = nodes[i];
+						// if the paragraph content is too small it's either a chart
+						if (el.innerText.replace(/[\t,\n, ]/g, "").length > 30) {
+							newsContent.push(el.outerHTML);
+						}
+					}
+					item.content = newsContent.join("");
+				}
+				catch(e) {
+				}
+				callback && callback(item);
+			},
+			error: function() {
+				callback && callback(null);
+			}
+		});
+	}
 	Stock.Downloader = { downloadDetailedQuotes: downloadDetailedQuotes,
 		downloadRTQuotes: downloadRTQuotes,
 		downloadSingleQuote: downloadSingleQuote,
 		getTopNews: getTopNews,
+		getNewsContent: getNewsContent,
 		getNews: getNews,
 		setCallback: function(cb) { onQuotesDownloadedCB = cb; }
 	};

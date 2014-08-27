@@ -291,6 +291,14 @@
 						$.mobile.navigate("#ViewStock");
 					}
 					break;
+				case "viewNewsArticle":
+					$.mobile.loading( "show" );
+					Stock.Downloader.getNewsContent(info.el.dataset.link, function(newsItem) {
+						renderPage("ViewNewsArticle", "ViewNewsArticle", newsItem);
+						$.mobile.navigate("#ViewNewsArticle");
+						$.mobile.loading( "hide" );
+					});
+					break;
 				case "viewNews":
 					if (renderViewNews()) {
 						$.mobile.navigate("#ViewNews");

@@ -293,7 +293,7 @@
 			}
 			if (curItem.title.indexOf("[$$]") == -1 && curItem.title.indexOf("[video]") == -1) {
 				existing = _combinedNews.filter(function (msg) {
-					return msg.guid == curItem.guid;
+					return msg.title == curItem.title;
 				});
 				if (existing.length == 0) {
 					// Remove the tracking image

@@ -31,7 +31,7 @@
 		if (params.type == "quote") {
 			var symbol = params.symbol || context.get("symbol"),
 				quote = Stock.QuoteManager.quotes[symbol];
-			return chunk.write(quote.change >= 0 ? "positive" : "negative");
+			return chunk.write(quote ? (quote.change >= 0 ? "positive" : "negative") : "");
 		}
 		else if (params.type == "port") {
 
@@ -147,7 +147,7 @@
 					days = hours / 24;
 
 				if (days > 0) {
-					str = [dayOfWeek[date.getDay()], date.getMonth() + "/" + date.getDate(), date.toLocaleTimeString()].join(" ");
+					str = [dayOfWeek[date.getDay()], (date.getMonth() + 1) + "/" + date.getDate(), date.toLocaleTimeString()].join(" ");
 				}
 				else if (hours > 0) {
 					str = hours > 1 ? hours + " hours ago" : "1 hour ago";
