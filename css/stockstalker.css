@@ -163,13 +163,14 @@ table.draw-border td {
   font-size: small;
 }
 .news-item .inline-quote {
-  padding: 0 5px;
+  padding-right: 5px;
 }
 .news-item .inline-quote .change {
   padding-left: 5px;
 }
-.news-item .inline-quote:not(:last-child) {
-  border-right: 1px solid rgba(0,0,0,0.2);
+.news-item .inline-quote:not(:first-child) {
+  border-left: 1px solid rgba(0,0,0,0.2);
+  padding-left: 5px;
 }
 #ViewNewsArticle .title {
   font-size: x-large;
