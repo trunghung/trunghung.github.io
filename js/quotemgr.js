@@ -21,6 +21,7 @@
 	    downloadSingleQuote: downloadSingleQuote,
 		
 		getInfo: getInfo,
+	    getNewsItem: getNewsItem,
 		getEarnings: getEarnings,
 		getTopNews: getTopNews,
 	    getStocksNews: getStocksNews,
@@ -277,6 +278,12 @@
 		}
 		return _combinedNews.filter(filter);
 	}
+	function getNewsItem(url) {
+		var matches = _combinedNews.filter(function(item) {
+			return item.link == url;
+		});
+		return matches.length > 0 ? matches[0] : null;
+	}
 	var _newsEventPending = false;
 	var _newsLastFetched = [];
 	var _combinedNews = [];
@@ -291,13 +298,11 @@
 				console.log("News: Old new items. Date: " + curItem.pubDate);
 				continue;
 			}
-			if (curItem.title.indexOf("[$$]") == -1 && curItem.title.indexOf("[video]") == -1) {
+			if (curItem.title.indexOf("[$$]") == -1 && curItem.title.indexOf("[video]") == -1 && Stock.News.parseItem(curItem)) {
 				existing = _combinedNews.filter(function (msg) {
 					return msg.title == curItem.title;
 				});
 				if (existing.length == 0) {
-					// Remove the tracking image
-					curItem.description = curItem.description.replace(/<img.*>/, "");
 					_combinedNews.push(curItem);
 					console.log("News: Adding new news item");
 				}

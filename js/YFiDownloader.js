@@ -306,7 +306,8 @@
 				callbackFn.success(data);
 			},
 			error: function(error) {
-				callbackFn.error();
+				console.error("Failed to download file: " + url);
+				callbackFn.error && callbackFn.error();
 			}
 		});
 	}
@@ -396,75 +397,44 @@
 				}
 			});
 	}
-	function getNews(stocks, callback) {
-		if (stocks) {
-			query = ['select * from rss where url="http://articlefeeds.nasdaq.com/nasdaq/symbols?symbol=', stocks.replace(/\^/gi, "%5E"),'"'].join('');
-			var url = "http://query.yahooapis.com/v1/public/yql?q=" + encodeURIComponent(query) + "&format=json&rand=" + (new Date()).getTime();
-			requestFileXHR(url, {
-					success: function(response) {
-						try {
-							var news = JSON.parse(response);
-							callback && callback(news.query.results.item, stocks);
-						}
-						catch(e) {
-							
-						}
+
+	function getNews(stock, callback) {
+		var query = ['select * from rss where url="http://finance.yahoo.com/rss/headline?s=', stock.replace(/\^/gi, "%5E"),'"'].join(''),
+		requestUrl = "http://query.yahooapis.com/v1/public/yql?q=" + encodeURIComponent(query)  + "&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&rand=" + (new Date()).getTime();
+		console.log(query);
+		requestFileXHR(requestUrl, {
+				success: function(response) {
+					var results = null;
+					try {
+						var json = JSON.parse(response);
+						results = json.query.results.item;
 					}
-				});
-		}
+					catch(e) {
+					}
+					callback && callback(results, stock);
+				}
+			});
 		return false;
 	}
-	function getNewsContent(url, callback) {
-		var query = ['select * from htmlstring where url="' + url + '" and  xpath="//div[@id=\'wide-main-content\']"'].join('');
+
+	function getNewsContent(item, callback) {
+		var xpath = Stock.News.getXPath(item);
+		if (!xpath) {
+			callback && callback(null);
+			return;
+		}
+		var query = ['select * from htmlstring where url="' + item.link + '" and  xpath="' + xpath + '"'].join('');
 		var requestUrl = "http://query.yahooapis.com/v1/public/yql?q=" + encodeURIComponent(query)  + "&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&rand=" + (new Date()).getTime();
+		console.log(query)
 		requestFileXHR(requestUrl, {
 			success: function(response) {
-				var item = {
-					symbols: []
-				};
 				try {
-					var i, nodes, el, elContent, newsContent = [], html = JSON.parse(response);
+					var elContent, html = JSON.parse(response);
 					// Neuter all the img tags and script tags
 					html = html.query.results.result.replace(/src=\"http/g,'src2="http').replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "");
 					elContent = convertToDom(html);
 
-					// Extract author and date
-					el = elContent.querySelector("h1");
-					item.title = el && el.innerText.trim();
-					el = elContent.querySelector(".dateCreated [rel=author]");
-					item.publisher = el && el.innerText.trim();
-					el = elContent.querySelector(".dateCreated [content]");
-					item.pubDate = el && el.innerText.trim();
-					item.date = new Date(item.pubDate);
-
-					// Convert all the a tag into <b> and extract referenced stocks
-					nodes = elContent.querySelectorAll("#wide-main-content p a");
-					for(i=0; i < nodes.length; i++) {
-						el = nodes[i];
-						var text = el.innerText.trim();
-						if (el.href.indexOf("http://www.nasdaq.com/symbol/") == 0) {
-							item.symbols.push(text);
-							el.remove();
-						}
-						else if (text.length = 0) {
-							el.remove();
-						}
-						else {
-							elChild = document.createElement("b");
-							elChild.innerText = text;
-							el.parentNode.replaceChild(elChild, el);
-						}
-					}
-
-					nodes = elContent.querySelectorAll("#wide-main-content > p");
-					for(i=0; i<nodes.length; i++) {
-						el = nodes[i];
-						// if the paragraph content is too small it's either a chart
-						if (el.innerText.replace(/[\t,\n, ]/g, "").length > 30) {
-							newsContent.push(el.outerHTML);
-						}
-					}
-					item.content = newsContent.join("");
+					Stock.News.extractNewsContent(item, elContent);
 				}
 				catch(e) {
 				}

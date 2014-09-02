@@ -142,9 +142,9 @@
 				str = [date.getMonth()+1, date.getDate(), date.getFullYear()%1000].join("/");
 			}
 			else if (params.timeElapsed) {
-				var min = ((new Date()).getTime() - date.getTime())/60000, // in minutes
-					hours = min / 60,
-					days = hours / 24;
+				var min = Math.round(((new Date()).getTime() - date.getTime())/60000), // in minutes
+					hours = Math.round(min / 60),
+					days = Math.round(hours / 24);
 
 				if (days > 0) {
 					str = [dayOfWeek[date.getDay()], (date.getMonth() + 1) + "/" + date.getDate(), date.toLocaleTimeString()].join(" ");

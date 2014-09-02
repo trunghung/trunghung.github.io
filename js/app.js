@@ -293,10 +293,16 @@
 					break;
 				case "viewNewsArticle":
 					$.mobile.loading( "show" );
-					Stock.Downloader.getNewsContent(info.el.dataset.link, function(newsItem) {
-						renderPage("ViewNewsArticle", "ViewNewsArticle", newsItem);
-						$.mobile.navigate("#ViewNewsArticle");
-						$.mobile.loading( "hide" );
+					var item = Stock.QuoteManager.getNewsItem(info.el.dataset.link);
+					Stock.Downloader.getNewsContent(item, function(newsItem) {
+						if (newsItem) {
+							renderPage("ViewNewsArticle", "ViewNewsArticle", newsItem);
+							$.mobile.navigate("#ViewNewsArticle");
+							$.mobile.loading("hide");
+						}
+						else {
+							alert("Failed to load news article");
+						}
 					});
 					break;
 				case "viewNews":
@@ -464,6 +470,7 @@
 	function renderPage(template, pageId, context) {
 		var cssSel = "#" + pageId,
 			page = document.querySelector(cssSel);
+		context = context || {};
 		context.authenticated = Stock.Portfolios.isAuthed();
 		if (!page) {
 			context.pageId = pageId;
